@@ -98,6 +98,9 @@ else:
                 menor_distancia_euclidiana = dist_euclidiana
                 usuario_euclidiana = nombre
 
+    manhattan_dist = manhattan(angelica, veronica)
+e   uclidean_dist = euclidean(angelica, veronica)
+
     print(f"Para {usuario_comparado}:")
     print(f"Distancia de Manhattan más pequeña: {menor_distancia_manhattan} con {usuario_manhattan}")
     print(f"Distancia Euclidiana más pequeña: {menor_distancia_euclidiana} con {usuario_euclidiana}")
