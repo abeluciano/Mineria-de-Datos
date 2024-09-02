@@ -46,15 +46,44 @@ def aproximacionPearson(user1, user2):
     #resultado
     return num / den
 
+#def similitudCoseno(user1, user2):
+#    sum_xy = sum(r1 * r2 for r1, r2 in zip(user1, user2) if not pd.isna(r1) and not pd.isna(r2))
+#    sum_x2 = math.sqrt(sum(pow(r1, 2) for r1 in user1 if not pd.isna(r1)))
+#    sum_y2 = math.sqrt(sum(pow(r2, 2) for r2 in user2 if not pd.isna(r2)))
+#    
+#    if sum_x2 == 0 or sum_y2 == 0:
+#        return 0
+#    
+#   return sum_xy / (sum_x2 * sum_y2)
+
 def similitudCoseno(user1, user2):
-    sum_xy = sum(r1 * r2 for r1, r2 in zip(user1, user2) if not pd.isna(r1) and not pd.isna(r2))
-    sum_x2 = math.sqrt(sum(pow(r1, 2) for r1 in user1 if not pd.isna(r1)))
-    sum_y2 = math.sqrt(sum(pow(r2, 2) for r2 in user2 if not pd.isna(r2)))
+ 
+    sum_producto = 0    
+    sum_a_cuadrado = 0  
+    sum_b_cuadrado = 0   
     
-    if sum_x2 == 0 or sum_y2 == 0:
+    # Recorrer las calificaciones
+    for i in range(len(user1)):
+        rating1 = user1[i]
+        rating2 = user2[i]
+        
+        if not pd.isna(rating1) and not pd.isna(rating2):
+            sum_producto += rating1 * rating2
+            sum_a_cuadrado += rating1 * rating1
+            sum_b_cuadrado += rating2 * rating2
+    
+    # Calcular normas
+    norma_a = math.sqrt(sum_a_cuadrado)
+    norma_b = math.sqrt(sum_b_cuadrado)
+    
+    # Evitar división por cero
+    if norma_a == 0 or norma_b == 0:
         return 0
     
-    return sum_xy / (sum_x2 * sum_y2)
+    # Similitud del coseno
+    similitud = sum_producto / (norma_a * norma_b)
+    return similitud
+
 
 
 df = pd.read_csv('ratings.csv', index_col=0, delimiter=',', decimal=',')
