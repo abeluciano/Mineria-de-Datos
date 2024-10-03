@@ -99,7 +99,7 @@ def predecir_calificacion(usuario, pelicula, k, distancia, ratings_matrix, punta
 
     if usuario_data[pelicula - 1] != 0:
         print(f"El usuario {usuario} ya ha calificado la película {pelicula}.")
-        return None
+        return None, 0
 
     # Variables para acumular la suma ponderada de las calificaciones y las distancias
     suma_ponderada = 0
@@ -119,11 +119,12 @@ def predecir_calificacion(usuario, pelicula, k, distancia, ratings_matrix, punta
 
     if suma_distancias == 0:
         print(f"Ninguno de los vecinos válidos ha calificado la película {pelicula}.")
-        return None
+        return None, vecinos_validos  # Devolver 0 vecinos válidos
 
     # Calcular la predicción
     calificacion_predicha = suma_ponderada / suma_distancias
     return round(calificacion_predicha, 2), vecinos_validos
+
 
 sparse_file = 'matriz_creada.npz'
 
@@ -198,16 +199,19 @@ elif opcion == "3":
         print(f"Usuario {vecino}, Distancia: {dist}")
 
 elif opcion == "4":
-    usuario = int(input("Ingrese el ID del usuario: "))
-    pelicula = int(input("Ingrese el ID de la película: "))
-    distancia = input("Seleccione la distancia ('manhattan', 'euclidiana', 'pearson', 'coseno'): ")
-    k = int(input("Ingrese el valor de k: "))
-    puntaje_minimo = int(input("Ingrese el puntaje mínimo para considerar las calificaciones de los vecinos: "))
+    usuario = int(input("Ingrese el ID del usuario a comparar: "))
+    pelicula = int(input("Ingrese el ID de la película que desea predecir: "))
+    k = int(input("Ingrese el número de vecinos (k): "))
+    distancia = input("Ingrese la métrica de distancia (manhattan, euclidiana, pearson, coseno): ")
+    puntaje_minimo = float(input("Ingrese el puntaje mínimo para los vecinos (por ejemplo, 3): "))
+
+    # Obtener el nombre de la película
+    nombre_pelicula = peliculas.get(pelicula, "Película desconocida")
 
     prediccion, vecinos_validos = predecir_calificacion(usuario, pelicula, k, distancia, ratings_matrix, puntaje_minimo)
-
+    
     if prediccion is not None:
-        print(f"\nPredicción de calificación para la película {pelicula} por el usuario {usuario}: {prediccion}")
-        print(f"Vecinos válidos considerados: {vecinos_validos}")
+        print(f"La calificación predicha para el usuario {usuario} en la película '{nombre_pelicula}' es: {prediccion}")
+        print(f"Vecinos válidos considerados en el algoritmo: {vecinos_validos}/{k}")
     else:
-        print(f"No se pudo realizar la predicción para la película {pelicula}.")
+        print(f"No hay suficiente información para predecir la calificación de la película '{nombre_pelicula}'.")
